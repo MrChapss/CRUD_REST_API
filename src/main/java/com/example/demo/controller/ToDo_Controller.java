@@ -10,6 +10,15 @@ public class ToDo_Controller {
 	
 	@PostMapping
 	public String addTodo(@RequestBody String todo) {
+		for (String tdl : todos) {
+			if (todo.isEmpty()) {
+				return "a todo cannot be empty!";
+			}
+			
+			if (tdl.contains(todo)) {
+				return "'" + todo + "' todo already exist in the list!";
+			}
+		}
 		todos.add(todo);
 		return "Todo added: " + todo;
 	}
@@ -21,7 +30,6 @@ public class ToDo_Controller {
 		}
 		String removedTodo = todos.remove(index);
 		return "Deleted todo : '" + removedTodo + "'";
-		
 		/*
 		if (!todos.contains(todo)) {
 			return "'" + todo + "' does not exist in todo list!";
