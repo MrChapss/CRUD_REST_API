@@ -11,28 +11,38 @@ public class ToDo_Controller {
 	@PostMapping
 	public String addTodo(@RequestBody String todo) {
 		todos.add(todo);
-		
 		return "Todo added: " + todo;
 	}
 	
-	@DeleteMapping
-	public String removeTodo(@RequestBody String todo) {
-		todos.remove(todo);
+	@DeleteMapping("/{index}")
+	public String removeTodo(@PathVariable int index) {
+		if (index<0||index>=todos.size()) {
+			return "Invalid index: " + index;
+		}
+		String removedTodo = todos.remove(index);
+		return "Deleted todo : '" + removedTodo + "'";
 		
+		/*
+		if (!todos.contains(todo)) {
+			return "'" + todo + "' does not exist in todo list!";
+		}
+		todos.remove(todo);
 		return "Todo removed: " + todo;
+		*/
 	}
 	
 	@GetMapping
-	public String showTodo(@RequestParam (required = false, defaultValue = "Skibidi") String todo) {
-		for (int i=0; i<todos.size(); i++) {
-			todos.get(i);
-		}
-		return "Todo are: " + todos;
+	public ArrayList<String> getTodos(){
+		return todos;
 	}
 	
-	@PutMapping
-	public String updataTodo(@RequestBody String todo) {
-		return "Sigma";
+	@PutMapping("/{index}")
+	public String updateTodo(@PathVariable int index, @RequestBody String todo) {
+		if (index<0||index>=todos.size()) {
+			return "Invalid";
+		}
+		String oldTodo = todos.set(index, todo);
+		return "Updated todo: " + oldTodo + "' to '" + todo;
 	}
 	
 }
