@@ -1,49 +1,47 @@
 package com.example.demo.controller;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.dao.UserDao;
+
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/todos")
+@RequestMapping("/user")
 public class ToDo_Controller {
-	
+	private final UserDao userDao;
 	private ArrayList<String> todos = new ArrayList<String>();
 	
+	public ToDo_Controller(UserDao userDao) {
+		this.userDao=userDao;
+	}
+	
 	@PostMapping
-	public String addTodo(@RequestBody String todo) {
-		for (String tdl : todos) {
-			if (todo.isEmpty()) {
-				return "a todo cannot be empty!";
-			}
-			
-			if (tdl.contains(todo)) {
-				return "'" + todo + "' todo already exist in the list!";
-			}
+	public String addUser(@RequestParam String name,
+						  @RequestParam int age,
+						  @RequestParam String underage) throws Exception {
+		if(age<=17) {
+			underage = "yes";
+		} else {
+			underage = "no";
 		}
-		todos.add(todo);
-		return "Todo added: " + todo;
+		
+		userDao.CreateUser(name, age, underage);
+		return "User '" + name + "' created!";
 	}
 	
-	@DeleteMapping("/{index}")
-	public String removeTodo(@PathVariable int index) {
-		if (index<0||index>=todos.size()) {
-			return "Invalid index: " + index;
-		}
-		String removedTodo = todos.remove(index);
-		return "Deleted todo : '" + removedTodo + "'";
-		/*
-		if (!todos.contains(todo)) {
-			return "'" + todo + "' does not exist in todo list!";
-		}
-		todos.remove(todo);
-		return "Todo removed: " + todo;
-		*/
+	@DeleteMapping
+	public String removeTodo(@RequestParam String name) throws Exception {
+		userDao.DeleteUser(name);
+		return "User '" + name + "' deleted!";
 	}
-	
+	// learning how to getmap in h2 db
 	@GetMapping
-	public ArrayList<String> getTodos(){
-		return todos;
+	public String getTodos(String name) throws Exception{
+		 userDao.ViewUser(name);
+		 return "User: " + name;
+		 
 	}
-	
+	// learning this too
 	@PutMapping("/{index}")
 	public String updateTodo(@PathVariable int index, @RequestBody String todo) {
 		if (index<0||index>=todos.size()) {
