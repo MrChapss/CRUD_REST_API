@@ -5,35 +5,57 @@ import com.example.demo.util.DBConnection;
 
 @Repository("userDao")
 public class UserDao {
-	Connection conn = DBConnection.getConnection();
-	public void CreateUser(String name, int age, String underage) throws Exception {
+	final Connection conn = DBConnection.getConnection();
+	// method for database to store the created todo 
+	public void createTDL(String title, String description, boolean is_completed) throws Exception {
 		try (PreparedStatement ps = conn.prepareStatement(
-				"INSERT INTO USERS(USER_NAME, AGE, IS_UNDERAGE) VALUES (?,?,?)"
+				"INSERT INTO TDL_LIST(TITLE, DESCRIPTION, IS_COMPLETED) VALUES (?,?,?)"
 			)) {
-			ps.setString(1, name);
-			ps.setInt(2, age);
-			ps.setString(3, underage);
+			ps.setString(1, title);
+			ps.setString(2, description);
+			ps.setBoolean(3, is_completed);
 			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	// method for database to be updated using the id
+	public void updateTDL(int id, String title, String description, boolean is_completed) throws Exception {
+		try (PreparedStatement ps = conn.prepareStatement(
+				"UPDATE TDL_LIST SET TITLE = ?, DESCRIPTION = ?, IS_COMPLETED = ? WHERE ID = (?)"
+				)) {
+			ps.setString(1, title);
+			ps.setString(2, description);
+			ps.setBoolean(3, is_completed);
+			ps.setInt(4, id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	// method for deleting a todo from database
+	public void deleteTDL(int id) throws Exception{
+		try(PreparedStatement ps = conn.prepareStatement(
+				"DELETE FROM TDL_LIST WHERE ID = (?)"
+				)) {
+			ps.setInt(1, id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	// method for viewing todo all list
+	// still not working
+	public void viewTDL(int id) throws Exception{
+		String sql = "SELECT * FROM TDL_LIST";
+		try(PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery()){
+			while (rs.next()) {
+				rs.getInt(id);
+			}
 		}
 	}
 	
-	public void DeleteUser(String name) throws Exception{
-		try(PreparedStatement ps = conn.prepareStatement(
-				"DELETE FROM USERS WHERE USER_NAME = (?)"
-				)) {
-			ps.setString(1, name);
-			ps.executeUpdate();
-		}
-	}
-	// not working 
-	public void ViewUser(String name) throws Exception{
-		try(PreparedStatement ps = conn.prepareStatement(
-				"SELECT USER_nAME FROM USERS VALUES (?)"
-				)){
-			ps.setString(1, name);
-			ps.executeQuery();
-		}
-	}
 }
 
 
