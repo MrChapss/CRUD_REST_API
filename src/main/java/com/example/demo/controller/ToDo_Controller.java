@@ -1,6 +1,7 @@
 package com.example.demo.controller;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.demo.service.*;
 import com.example.demo.dao.UserDao;
 
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ public class ToDo_Controller {
 	private final UserDao userDao;
 	private ArrayList<String> todos = new ArrayList<String>();
 	
-	public ToDo_Controller(UserDao userDao) {
+	public ToDo_Controller(@Qualifier("userDao") UserDao userDao) {
 		this.userDao=userDao;
 	}
+	
+	
 	
 	@PostMapping
 	public String addUser(@RequestParam String name,

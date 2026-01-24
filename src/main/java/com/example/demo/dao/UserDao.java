@@ -3,7 +3,7 @@ import java.sql.*;
 import org.springframework.stereotype.*;
 import com.example.demo.util.DBConnection;
 
-@Repository
+@Repository("userDao")
 public class UserDao {
 	Connection conn = DBConnection.getConnection();
 	public void CreateUser(String name, int age, String underage) throws Exception {
