@@ -26,6 +26,7 @@ public class ToDo_Controller {
 		return "TDL: '" + id + "' deleted!";
 	}
 	// i still don't fucking get it
+	// will fix this later
 	@GetMapping
 	public String getTodos(int id) throws Exception{
 		 userDao.viewTDL(id);

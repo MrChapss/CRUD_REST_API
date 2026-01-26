@@ -2,6 +2,8 @@ package com.example.demo.dao;
 import java.sql.*;
 import org.springframework.stereotype.*;
 import com.example.demo.util.DBConnection;
+import com.example.demo.entity.*;
+import java.util.*;
 
 @Repository("userDao")
 public class UserDao {
@@ -46,12 +48,16 @@ public class UserDao {
 	}
 	// method for viewing todo all list
 	// still not working
-	public void viewTDL(int id) throws Exception{
+	// must fix this later
+	public List<TDL> viewTDL() throws Exception{
 		String sql = "SELECT * FROM TDL_LIST";
+		List<TDL> todos = new ArrayList<>();
+		
 		try(PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery()){
 			while (rs.next()) {
-				rs.getInt(id);
+				int id = rs.getInt("id");
+				
 			}
 		}
 	}
