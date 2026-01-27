@@ -57,9 +57,15 @@ public class UserDao {
 			ResultSet rs = ps.executeQuery()){
 			while (rs.next()) {
 				int id = rs.getInt("id");
+				String title = rs.getString("title");
+				String description = rs.getString("description");
+				Boolean is_completed = rs.getBoolean("is_completed");
+				
+				todos.add(new TDL(id, title, description, is_completed));
 				
 			}
 		}
+		return todos;
 	}
 	
 }

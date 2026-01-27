@@ -2,6 +2,8 @@ package com.example.demo.controller;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.dao.UserDao;
+import com.example.demo.entity.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/todos")
@@ -15,7 +17,7 @@ public class ToDo_Controller {
 	@PostMapping
 	public String addUser(@RequestParam String title,
 						  @RequestParam String description,
-						  @RequestParam (required = false) Boolean is_completed) throws Exception {
+						  @RequestParam (required = false, defaultValue= "FALSE") Boolean is_completed) throws Exception {
 		userDao.createTDL(title, description, is_completed);
 		return "Created a todo!";
 	}
@@ -28,9 +30,8 @@ public class ToDo_Controller {
 	// i still don't fucking get it
 	// will fix this later
 	@GetMapping
-	public String getTodos(int id) throws Exception{
-		 userDao.viewTDL(id);
-		 return "User: " + id;
+	public List<TDL> getTodos() throws Exception{
+		return userDao.viewTDL();
 	}
 	// Update the todo if user wants to change the title, description, and status (is_completed)
 	@PutMapping("/{id}")
