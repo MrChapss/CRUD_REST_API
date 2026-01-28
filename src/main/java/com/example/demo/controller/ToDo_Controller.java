@@ -22,17 +22,24 @@ public class ToDo_Controller {
 		return "Created a todo!";
 	}
 	// Delete a todo from h2 database through id
+	// modify the delete by adding the view title method
 	@DeleteMapping("/{id}")
-	public String removeTodo(@RequestParam int id) throws Exception {
-		userDao.deleteTDL(id);
-		return "TDL: '" + id + "' deleted!";
+	public String removeTodo(@PathVariable int id) throws Exception {
+		
+		return "TDL: " + ViewTodo(id) + ", #" +userDao.deleteTDL(id) + " - deleted!";
 	}
-	// i still don't fucking get it
-	// will fix this later
+	// View all the todo's in JSON form
 	@GetMapping
-	public List<TDL> getTodos() throws Exception{
-		return userDao.viewTDL();
+	public List<TDL> ViewTodos() throws Exception{
+		return userDao.viewAllTDL();
 	}
+	// View a todo based on its id
+	@GetMapping("/{id}")
+	public String ViewTodo(@PathVariable int id) throws Exception{
+		return userDao.viewTitle(id);
+	}
+	
+	
 	// Update the todo if user wants to change the title, description, and status (is_completed)
 	@PutMapping("/{id}")
 	public String updateTodo(@PathVariable int id,
